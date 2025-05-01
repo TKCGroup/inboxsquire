@@ -1,8 +1,6 @@
 {
   "version": 2,
   "framework": "nextjs",
-  "buildCommand": "cd apps/web && npm install && npx --no-install next build",
-  "installCommand": "npm install",
   "outputDirectory": "apps/web/.next",
   "env": {
     "NODE_VERSION": "18.x"

@@ -47,21 +47,39 @@ To: `"buildCommand": "cd apps/web && npm install && $(npm bin)/next build"`
 - Build failed with `sh: Unknown: command not found` and exit code 127.
 - **Analysis:** The Vercel build environment's shell (`sh`) did not correctly interpret or execute the command resulting from the `$(npm bin)` substitution.
 
-## Current Hypothesis (Revised Again)
-
-The Vercel `sh` environment doesn't support the `$(npm bin)` command substitution method used. However, the core issue remains needing to execute the *locally installed* `next` binary (version 14.2.15) within the `apps/web` context, without triggering the root Turborepo build or fetching the latest `next` version.
-
-## Proposed Solution (Revised Again)
-
-Use `npx` again, but add the `--no-install` flag. This instructs `npx` to execute the `next` command *only* if it's found in the local `node_modules/.bin` path (which it should be after `npm install`), preventing it from fetching the latest version if it can't find it locally.
+## Attempt 3: Use `npx --no-install next build`
 
 **Change:**
 From: `"buildCommand": "cd apps/web && npm install && $(npm bin)/next build"`
 To: `"buildCommand": "cd apps/web && npm install && npx --no-install next build"`
 
+**Result:**
+- Build failed with `npm error npx canceled due to missing packages and no YES option: ["next@15.3.1"]`.
+- **Analysis:** Despite the `--no-install` flag, `npx` in the Vercel environment still attempted to fetch the latest `next` version instead of using the locally installed one. This likely points to an issue with PATH resolution or `npx` behavior in the Vercel build container when invoked this way.
+
+## Current Hypothesis (Revised Yet Again)
+
+Manually specifying complex `buildCommand` or `installCommand` overrides in `vercel.json` is interfering with Vercel's native, optimized build process for Next.js applications within a Turborepo monorepo. Relying on Vercel's automatic detection might be more robust.
+
+## Proposed Solution (Simplify `vercel.json`)
+
+Remove manual command overrides from `vercel.json` and rely on Vercel's built-in Turborepo integration. Ensure Vercel project settings correctly identify the monorepo root.
+
+**`turbo.json` Review:**
+- Confirmed `"build"` task includes `".next/**"` in outputs.
+
+**Change (`vercel.json`):**
+- Remove `"buildCommand"` key/value.
+- Remove `"installCommand"` key/value.
+- Keep `"framework": "nextjs"`.
+- Keep `"outputDirectory": "apps/web/.next"`.
+
+**Required Vercel UI Setting:**
+- Ensure the "Root Directory" setting points to the *monorepo root* (likely empty or `/`), **not** `apps/web`.
+
 ## Next Steps
 
-1.  Apply the latest revised change to `vercel.json`.
+1.  Apply the simplification changes to `vercel.json`.
 2.  Commit and push the change.
 3.  Trigger a new Vercel deployment.
 4.  Monitor the build logs. 
