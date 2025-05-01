@@ -37,22 +37,31 @@ To: `"buildCommand": "cd apps/web && npm install && npm run build"`
 - New error surfaced: `Error: The file "/vercel/path0/apps/web/.next/routes-manifest.json" couldn't be found.`
 - **Analysis:** The build logs showed that `npm run build` inside `apps/web` triggered the *root* `package.json`'s build script (`turbo run build`). Turborepo then executed but only built the `@squire/extension` package, not the `web` package. Consequently, the `apps/web/.next` directory was not generated.
 
-## Current Hypothesis (Revised)
-
-Running `npm run build` within the `apps/web` directory during the Vercel build process is being intercepted by the root `package.json`'s scripts, causing `turbo run build` to run from the monorepo root. This root execution context fails to correctly identify and build the `web` application specifically for the deployment, leading to missing build artifacts.
-
-## Proposed Solution (Revised)
-
-Modify the `buildCommand` in `vercel.json` to *directly* execute the `next build` command using the locally installed `next` binary within the `apps/web` directory. This bypasses the root `npm run build` script and ensures only the web app is built using its correct dependencies.
+## Attempt 2: Use `$(npm bin)/next build`
 
 **Change:**
 From: `"buildCommand": "cd apps/web && npm install && npm run build"`
 To: `"buildCommand": "cd apps/web && npm install && $(npm bin)/next build"`
 
+**Result:**
+- Build failed with `sh: Unknown: command not found` and exit code 127.
+- **Analysis:** The Vercel build environment's shell (`sh`) did not correctly interpret or execute the command resulting from the `$(npm bin)` substitution.
+
+## Current Hypothesis (Revised Again)
+
+The Vercel `sh` environment doesn't support the `$(npm bin)` command substitution method used. However, the core issue remains needing to execute the *locally installed* `next` binary (version 14.2.15) within the `apps/web` context, without triggering the root Turborepo build or fetching the latest `next` version.
+
+## Proposed Solution (Revised Again)
+
+Use `npx` again, but add the `--no-install` flag. This instructs `npx` to execute the `next` command *only* if it's found in the local `node_modules/.bin` path (which it should be after `npm install`), preventing it from fetching the latest version if it can't find it locally.
+
+**Change:**
+From: `"buildCommand": "cd apps/web && npm install && $(npm bin)/next build"`
+To: `"buildCommand": "cd apps/web && npm install && npx --no-install next build"`
 
 ## Next Steps
 
-1.  Apply the revised change to `vercel.json`.
+1.  Apply the latest revised change to `vercel.json`.
 2.  Commit and push the change.
 3.  Trigger a new Vercel deployment.
 4.  Monitor the build logs. 
