@@ -1,9 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rootDirectory": "apps/web",
   "buildCommand": "cd ../.. && npx turbo build --filter=web",
   "devCommand": "cd ../.. && npx turbo dev --filter=web",
   "installCommand": "cd ../.. && npm install",
-  "outputDirectory": ".next",
+  "outputDirectory": "apps/web/.next",
   "rewrites": [
     {
       "source": "/ingest/:match*",
