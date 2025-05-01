@@ -157,3 +157,20 @@
 - **Next Step:** Set up Git repository and Vercel deployment configuration.
 
 --- 
+
+## [2025-05-03] - Vercel Build Debugging & Fixes
+
+- Investigated Vercel build failure (`No Next.js version detected`).
+- Added explicit `next`, `react`, and `react-dom` to **root** `package.json` `devDependencies` so the Vercel Turbo detector always finds a Next.js version at the repo root.
+- Reproduced build locally with `npx turbo run build --filter=web`.
+    - Hit compile error: `Unknown font Geist / Geist Mono` coming from `next/font/google` import.
+- **Switch to Vercel's `geist` package**:
+    - Installed `geist@^1.4.1` in `apps/web`.
+    - Replaced `next/font/google` import with `geist/font/sans` and `geist/font/mono` in `apps/web/src/app/layout.tsx`.
+    - Simplified usage to `GeistSans.variable` / `GeistMono.variable` CSS vars.
+- Confirmed Turbo build now compiles successfully in ~14 s locally (no font error).
+- Updated **`apps/web/package.json`** to include new `geist` dependency.
+- This should unblock Vercel build (screenshot settings already point `Root Directory = apps/web`, `Build Command = cd ../.. && npx turbo build --filter=web`, etc.).
+- Next Step: push changes & retrigger Vercel deployment.
+
+--- 
