@@ -1,0 +1,32 @@
+{
+  "projectRules": [
+    {
+      "id":       "monorepo-layout",
+      "pattern":  "**/*",  
+      "phase":    "completion",
+      "insert":   "prepend",
+      "text":     "🚀 *All responses should assume a Turbo-powered monorepo with `apps/`, `functions/`, and `infra/` per Tyler’s Universal App Template.*"
+    },
+    {
+      "id":       "supabase-default",
+      "pattern":  "apps/web/**",
+      "phase":    "completion",
+      "insert":   "prepend",
+      "text":     "🔑 *Use Supabase client, edge functions, and RLS by default; only fall back to Firebase/GCP if agentic cron jobs are required.*"
+    },
+    {
+      "id":       "python-venv-docker",
+      "pattern":  "functions/python/**",
+      "phase":    "completion",
+      "insert":   "prepend",
+      "text":     "🐍 *Ensure each Python function folder has a `.venv/`, `requirements.txt`, and a minimal `Dockerfile` for portability.*"
+    },
+    {
+      "id":       "tailwind-shadcn",
+      "pattern":  "apps/web/src/components/**",
+      "phase":    "completion",
+      "insert":   "prepend",
+      "text":     "🎨 *Use Tailwind utility classes + shadcn/ui primitives for all new components; fall back to Framer-Motion for animations.*"
+    }
+  ]
+}

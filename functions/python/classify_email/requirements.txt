@@ -1,0 +1,14 @@
+# Core dependencies for the classification service
+fastapi
+uvicorn[standard] # Includes standard ASGI server dependencies
+pydantic
+httpx # For making async HTTP requests
+
+# AI dependencies (add specific versions later)
+openai
+# python-dotenv # Optional: for loading .env files 
+
+# Database dependencies
+supabase # Python client for Supabase
+
+# python-dotenv # Optional: for loading .env files 

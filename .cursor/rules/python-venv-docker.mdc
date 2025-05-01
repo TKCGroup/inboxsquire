@@ -1,0 +1,6 @@
+---
+description: 
+globs: functions/python/**
+alwaysApply: false
+---
+🐍 *Ensure each Python microservice folder has: a `.venv/`, a `requirements.txt` pinned to specific LangChain versions, and a minimal `Dockerfile` for portability.*

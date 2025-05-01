@@ -1,0 +1,6 @@
+---
+description: 
+globs: **/*
+alwaysApply: false
+---
+🚀 *All agent-generated code should assume a Turbo-powered monorepo with directories:* `apps/`, `functions/`, and `infra/` per the Universal App Template.*

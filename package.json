@@ -1,0 +1,21 @@
+{
+  "name": "squire-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "functions/*"
+  ],
+  "scripts": {
+    "clean": "git clean -Xfd && rm -rf node_modules",
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "turbo": "latest",
+    "prettier": "latest"
+  },
+  "packageManager": "npm@10.8.2"
+} 

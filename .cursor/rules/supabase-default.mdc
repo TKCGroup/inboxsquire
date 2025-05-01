@@ -1,0 +1,6 @@
+---
+description: 
+globs: apps/web/**
+alwaysApply: false
+---
+🔑 *Use Supabase client libraries, edge functions and RLS by default; only fall back to Firebase + GCP Cloud Functions when true cron jobs or background agentic workflows are required.*

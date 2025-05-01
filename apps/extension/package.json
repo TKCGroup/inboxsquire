@@ -1,0 +1,12 @@
+{
+  "name": "@squire/extension",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "echo \"No build step required for basic extension yet\"",
+    "lint": "echo \"Linting not set up yet\""
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.268"
+  }
+} 

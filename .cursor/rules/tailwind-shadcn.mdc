@@ -1,0 +1,6 @@
+---
+description: 
+globs: apps/web/src/components/**
+alwaysApply: false
+---
+🎨 *Use Tailwind CSS utility classes and shadcn/ui primitives for all new React components; for animations use Framer Motion. If a component isn’t available, create a custom one following the same utility-first styling approach.*
