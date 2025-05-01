@@ -54,8 +54,8 @@
 *Goal: Prepare for external beta testers with core functionality and feedback mechanisms.* (Target: Month 2)
 
 - [ ] **Setup Deployment:**
-    - [ ] Initialize Git repository.
-    - [ ] Configure Vercel deployment (`vercel.json` for monorepo).
+    - [x] Initialize Git repository.
+    - [x] Configure Vercel deployment (`vercel.json` for monorepo).
     - [ ] Deploy initial landing page to production domain (`inboxsquire.ai`).
 - [ ] **Refinement & Features:**
     - [ ] Refine Dashboard UI/UX based on internal feedback.

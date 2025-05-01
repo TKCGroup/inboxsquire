@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "cd ../.. && npx turbo build --filter=web",
+  "devCommand": "cd ../.. && npx turbo dev --filter=web",
+  "installCommand": "cd ../.. && npm install",
+  "framework": "nextjs",
+  "outputDirectory": "apps/web/.next",
+  "rootDirectory": "apps/web",
+  "rewrites": [
+    {
+      "source": "/ingest/:match*",
+      "destination": "/api/ingest/:match*"
+    }
+  ]
+} 
