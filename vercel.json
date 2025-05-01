@@ -5,7 +5,6 @@
   "installCommand": "cd ../.. && npm install",
   "framework": "nextjs",
   "outputDirectory": "apps/web/.next",
-  "rootDirectory": "apps/web",
   "rewrites": [
     {
       "source": "/ingest/:match*",
