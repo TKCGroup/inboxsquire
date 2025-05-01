@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
-  "buildCommand": "cd apps/web && npm install && npx next build",
+  "buildCommand": "cd apps/web && npm install && NEXT_TELEMETRY_DISABLED=1 NODE_ENV=production npx next@14.2.15 build",
   "installCommand": "npm install",
   "outputDirectory": "apps/web/.next"
 } 
