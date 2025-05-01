@@ -3,7 +3,7 @@
   "buildCommand": "cd ../.. && npx turbo build --filter=web",
   "devCommand": "cd ../.. && npx turbo dev --filter=web",
   "installCommand": "cd ../.. && npm install",
-  "outputDirectory": "apps/web/.next",
+  "outputDirectory": ".next",
   "rewrites": [
     {
       "source": "/ingest/:match*",
