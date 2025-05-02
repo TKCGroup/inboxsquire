@@ -69,24 +69,33 @@ To: `"buildCommand": "cd apps/web && npm install && npx --no-install next build"
 - Build failed with `Error: The file "/vercel/path0/apps/web/.next/routes-manifest.json" couldn't be found.`
 - **Analysis:** Vercel defaulted to running `npm run build` at the root, which executed `turbo run build`. However, the Turborepo execution log showed `Packages in scope: @squire/extension`, indicating it completely ignored the `web` package. `apps/web/package.json` was confirmed to have the correct `"name": "web"` field. Therefore, Vercel's default invocation of `turbo run build` in this project context does not correctly target the specific `web` application for deployment.
 
-## Current Hypothesis (Refined)
-
-Vercel's default build process for a Turborepo monorepo, while installing dependencies correctly at the root, does not automatically filter the `turbo run build` command to target only the specific application being deployed (in this case, `web`). This results in the target application not being built.
-
-## Proposed Solution (Turborepo Filtering)
-
-Explicitly define the `buildCommand` in `vercel.json` to use Turborepo's filtering mechanism, ensuring only the `web` package and its dependencies are built.
+## Attempt 5: Use `turbo run build --filter=web...`
 
 **Change (`vercel.json`):**
-- Add back `"buildCommand"`.
-- Set `"buildCommand": "turbo run build --filter=web..."`
-- Remove `"installCommand"` (Vercel should still handle root install).
-- Keep `"framework": "nextjs"`.
-- Keep `"outputDirectory": "apps/web/.next"`.
+- Added `"buildCommand": "turbo run build --filter=web..."`
+- Kept `"framework": "nextjs"`.
+- Kept `"outputDirectory": "apps/web/.next"`.
+
+**Result:**
+- Build failed with `x No package found with name 'web' in workspace` and `Error: Command "turbo run build --filter=web..." exited with 1`.
+- **Analysis:** Even with an explicit filter targeting the `web` package (which exists and is named correctly in `apps/web/package.json`), Turborepo failed to find the workspace within the Vercel build environment. This could be related to issues mentioned in [Turborepo Discussion #8514](https://github.com/vercel/turborepo/discussions/8514) regarding workspace detection in CI/Docker environments, potentially involving path resolution or specific Turborepo/package manager version interactions. The root `package.json` workspaces definition (`apps/*`) appears correct.
+
+## Current Hypothesis
+
+The Turborepo filter syntax `--filter=web...` might be interpreted incorrectly or is incompatible with how workspaces are resolved in the Vercel build environment for this project. Alternatively, there might be a subtle issue with Turborepo's workspace detection in this specific context.
+
+## Proposed Solution (Simplify Filter)
+
+Simplify the Turborepo filter syntax by removing the `...` which signifies dependency inclusion. Build only the target package `web` explicitly.
+
+**Change (`vercel.json`):**
+- Modify `"buildCommand"`.
+- From: `"turbo run build --filter=web..."`
+- To: `"turbo run build --filter=web"`
 
 ## Next Steps
 
-1.  Apply the Turborepo filter change to `vercel.json`.
+1.  Apply the simplified filter change to `vercel.json`.
 2.  Commit and push the change.
 3.  Trigger a new Vercel deployment.
 4.  Monitor the build logs. 
