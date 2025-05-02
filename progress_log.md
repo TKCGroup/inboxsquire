@@ -173,4 +173,22 @@
 - This should unblock Vercel build (screenshot settings already point `Root Directory = apps/web`, `Build Command = cd ../.. && npx turbo build --filter=web`, etc.).
 - Next Step: push changes & retrigger Vercel deployment.
 
+## [2025-05-03] - Vercel Build Debugging (Continued)
+
+- Continued troubleshooting Vercel deployment failures for the `apps/web` Next.js application.
+- **Attempt 1:** Modified `vercel.json` build command to `cd apps/web && npm install && npm run build`.
+    - **Result:** Fixed initial "Couldn't find app directory" error, but caused a new error: `routes-manifest.json` not found. Turborepo ran from the root but only built the `@squire/extension` package.
+- **Attempt 2:** Tried directly executing the local Next binary using `cd apps/web && npm install && $(npm bin)/next build`.
+    - **Result:** Failed with `sh: Unknown: command not found`. Vercel's shell didn't support `$(npm bin)`.
+- **Attempt 3:** Used `npx --no-install next build` via `cd apps/web && npm install && npx --no-install next build`.
+    - **Result:** Failed with `npx canceled due to missing packages`. `npx` still tried to fetch the latest `next` version despite the flag.
+- **Attempt 4:** Simplified `vercel.json` by removing `buildCommand` and `installCommand`, relying on Vercel defaults with Root Directory `./`.
+    - **Result:** Failed with `routes-manifest.json` not found. Vercel ran `turbo run build` from root but again only included `@squire/extension` in scope.
+- **Attempt 5:** Added `buildCommand: "turbo run build --filter=web..."` to explicitly target the `web` package.
+    - **Result:** Failed with `No package found with name 'web' in workspace`. Turborepo couldn't find the workspace in the Vercel environment.
+- **Attempt 6:** Simplified the filter to `buildCommand: "turbo run build --filter=web"`.
+    - **Result:** Failed again with `No package found with name 'web' in workspace`.
+- **Current Status:** Vercel builds are consistently failing because Turborepo, when executed via Vercel's build process (either by default or via explicit `buildCommand`), cannot locate the `web` workspace. Root `package.json` and `apps/web/package.json` configurations appear correct.
+- **Next Step:** Re-introduce `installCommand: "npm install"` alongside `buildCommand: "turbo run build --filter=web"` in `vercel.json` and ensure Vercel UI overrides are OFF.
+
 --- 
