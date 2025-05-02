@@ -57,29 +57,36 @@ To: `"buildCommand": "cd apps/web && npm install && npx --no-install next build"
 - Build failed with `npm error npx canceled due to missing packages and no YES option: ["next@15.3.1"]`.
 - **Analysis:** Despite the `--no-install` flag, `npx` in the Vercel environment still attempted to fetch the latest `next` version instead of using the locally installed one. This likely points to an issue with PATH resolution or `npx` behavior in the Vercel build container when invoked this way.
 
-## Current Hypothesis (Revised Yet Again)
-
-Manually specifying complex `buildCommand` or `installCommand` overrides in `vercel.json` is interfering with Vercel's native, optimized build process for Next.js applications within a Turborepo monorepo. Relying on Vercel's automatic detection might be more robust.
-
-## Proposed Solution (Simplify `vercel.json`)
-
-Remove manual command overrides from `vercel.json` and rely on Vercel's built-in Turborepo integration. Ensure Vercel project settings correctly identify the monorepo root.
-
-**`turbo.json` Review:**
-- Confirmed `"build"` task includes `".next/**"` in outputs.
+## Attempt 4: Simplify `vercel.json` (Rely on Vercel defaults)
 
 **Change (`vercel.json`):**
-- Remove `"buildCommand"` key/value.
-- Remove `"installCommand"` key/value.
+- Removed `"buildCommand"`.
+- Removed `"installCommand"`.
+- Kept `"framework": "nextjs"`, `"outputDirectory": "apps/web/.next"`.
+- Ensured Vercel UI "Root Directory" was set to `./` (monorepo root).
+
+**Result:**
+- Build failed with `Error: The file "/vercel/path0/apps/web/.next/routes-manifest.json" couldn't be found.`
+- **Analysis:** Vercel defaulted to running `npm run build` at the root, which executed `turbo run build`. However, the Turborepo execution log showed `Packages in scope: @squire/extension`, indicating it completely ignored the `web` package. `apps/web/package.json` was confirmed to have the correct `"name": "web"` field. Therefore, Vercel's default invocation of `turbo run build` in this project context does not correctly target the specific `web` application for deployment.
+
+## Current Hypothesis (Refined)
+
+Vercel's default build process for a Turborepo monorepo, while installing dependencies correctly at the root, does not automatically filter the `turbo run build` command to target only the specific application being deployed (in this case, `web`). This results in the target application not being built.
+
+## Proposed Solution (Turborepo Filtering)
+
+Explicitly define the `buildCommand` in `vercel.json` to use Turborepo's filtering mechanism, ensuring only the `web` package and its dependencies are built.
+
+**Change (`vercel.json`):**
+- Add back `"buildCommand"`.
+- Set `"buildCommand": "turbo run build --filter=web..."`
+- Remove `"installCommand"` (Vercel should still handle root install).
 - Keep `"framework": "nextjs"`.
 - Keep `"outputDirectory": "apps/web/.next"`.
 
-**Required Vercel UI Setting:**
-- Ensure the "Root Directory" setting points to the *monorepo root* (likely empty or `/`), **not** `apps/web`.
-
 ## Next Steps
 
-1.  Apply the simplification changes to `vercel.json`.
+1.  Apply the Turborepo filter change to `vercel.json`.
 2.  Commit and push the change.
 3.  Trigger a new Vercel deployment.
 4.  Monitor the build logs. 
