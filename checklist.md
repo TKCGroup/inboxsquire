@@ -40,11 +40,22 @@
     - [x] Refine `classify_email` function (`functions/python/classify_email`) (function calling, confidence score).
     - [x] Implement core agent actions triggered by classification: Auto-labeling (`/Exec Scout/{bucket}`), Archive, Delete, Move. (Basic actions implemented; draft/forward handling TODO)
     - [x] Implement "Draft Response" action (saves draft reference/content to Supabase).
-- [ ] **Web App (`apps/web`):**
+- [/] **Web App (`apps/web`):**
     - [x] Set up basic Next.js app structure.
     - [x] Integrate standalone landing page components & fix styling/hydration issues.
+    - [x] Build Prospect Intake Form (`/prospect-intake`) for lead qualification without discovery calls.
+    - [x] Build Admin Prospect Management page (`/admin/prospects`) with lead scoring and status tracking.
     - [ ] Build User Dashboard (`/dashboard`) to display classified emails, actions taken, and daily summary stats.
     - [ ] Build basic Settings page (`/settings`) - placeholder for notification preferences.
+    - [x] **FORMS SYSTEM (Phase 1):** Token-based forms for requirements gathering
+        - [x] Database schema and migration (`20250102120000_create_forms_tables.sql`)
+        - [x] API routes for forms CRUD and public access (`/api/forms/*`)
+        - [x] Forms dashboard for management (`/dashboard/forms`)
+        - [x] Public form rendering (`/forms/[token]`)
+        - [x] Dynamic form renderer component with multi-step navigation
+        - [x] Form templates system foundation
+        - [x] Analytics and submission tracking
+        - [x] "Powered by InboxSquire" viral marketing integration
 - [ ] **Backend/Digest:**
     - [ ] Create logic (e.g., Supabase Edge Function) to generate daily digest data.
     - [ ] Integrate SendGrid to email the daily digest.
@@ -53,10 +64,19 @@
 
 *Goal: Prepare for external beta testers with core functionality and feedback mechanisms.* (Target: Month 2)
 
-- [ ] **Setup Deployment:**
+- [/] **Setup Deployment:**
     - [x] Initialize Git repository.
     - [x] Configure Vercel deployment (`vercel.json` for monorepo).
-    - [ ] Deploy initial landing page to production domain (`inboxsquire.ai`).
+    - [x] **Forms System Production Ready** - Core forms functionality complete
+    - [x] **Build Ready for Deployment** - `npm run build` succeeds, all errors resolved
+    - [ ] **Deploy to Production via Vercel + GitHub CICD:**
+        - [ ] Connect GitHub repository to Vercel
+        - [ ] Configure production environment variables  
+        - [ ] Set up Supabase production database
+        - [ ] Configure custom domain (`inboxsquire.com`)
+        - [ ] Test production deployment
+        - [ ] Set up monitoring and error tracking
+    - [ ] Deploy initial landing page + forms system to production domain.
 - [ ] **Refinement & Features:**
     - [ ] Refine Dashboard UI/UX based on internal feedback.
     - [ ] Fully implement UI for reviewing, editing, and sending drafted responses from the Dashboard.
