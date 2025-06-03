@@ -1,11 +1,16 @@
 {
   "version": 2,
-  "framework": "nextjs",
   "installCommand": "npm install",
-  "buildCommand": "cd apps/web && npm run build",
+  "buildCommand": "npx turbo run build --filter=web",
   "outputDirectory": "apps/web/.next",
   "env": {
-    "NODE_VERSION": "18.x"
+    "NODE_VERSION": "18.x",
+    "TURBO_TELEMETRY_DISABLED": "1"
+  },
+  "functions": {
+    "apps/web/app/api/**/*.js": {
+      "maxDuration": 30
+    }
   },
   "headers": [
     {

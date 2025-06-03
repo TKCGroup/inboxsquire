@@ -9,9 +9,11 @@
   "scripts": {
     "clean": "git clean -Xfd && rm -rf node_modules",
     "build": "turbo run build",
+    "build:web": "turbo run build --filter=web",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "vercel-build": "turbo run build --filter=web"
   },
   "devDependencies": {
     "turbo": "latest",
