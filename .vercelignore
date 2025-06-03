@@ -41,6 +41,10 @@ infra/
 *.md
 !README.md
 
+# Test scripts
+*test*.sh
+*-test.sh
+
 # Git
 .git
 .gitignore 

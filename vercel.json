@@ -7,11 +7,6 @@
     "NODE_VERSION": "18.x",
     "TURBO_TELEMETRY_DISABLED": "1"
   },
-  "functions": {
-    "apps/web/app/api/**/*.js": {
-      "maxDuration": 30
-    }
-  },
   "headers": [
     {
       "source": "/api/(.*)",
