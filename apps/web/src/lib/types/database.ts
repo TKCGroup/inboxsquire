@@ -67,7 +67,10 @@ export type Database = {
           form_id: string | null
           id: string
           ip_address: unknown | null
-          session_id: string | null
+          metadata: Json | null
+          question_id: string | null
+          referrer: string | null
+          session_id: string
           user_agent: string | null
         }
         Insert: {
@@ -76,7 +79,10 @@ export type Database = {
           form_id?: string | null
           id?: string
           ip_address?: unknown | null
-          session_id?: string | null
+          metadata?: Json | null
+          question_id?: string | null
+          referrer?: string | null
+          session_id: string
           user_agent?: string | null
         }
         Update: {
@@ -85,7 +91,10 @@ export type Database = {
           form_id?: string | null
           id?: string
           ip_address?: unknown | null
-          session_id?: string | null
+          metadata?: Json | null
+          question_id?: string | null
+          referrer?: string | null
+          session_id?: string
           user_agent?: string | null
         }
         Relationships: [
@@ -100,6 +109,7 @@ export type Database = {
       }
       form_responses: {
         Row: {
+          completion_time_seconds: number | null
           form_id: string | null
           id: string
           ip_address: unknown | null
@@ -107,10 +117,12 @@ export type Database = {
           respondent_email: string | null
           respondent_name: string | null
           response_data: Json
+          status: string
           submitted_at: string | null
           user_agent: string | null
         }
         Insert: {
+          completion_time_seconds?: number | null
           form_id?: string | null
           id?: string
           ip_address?: unknown | null
@@ -118,10 +130,12 @@ export type Database = {
           respondent_email?: string | null
           respondent_name?: string | null
           response_data?: Json
+          status?: string
           submitted_at?: string | null
           user_agent?: string | null
         }
         Update: {
+          completion_time_seconds?: number | null
           form_id?: string | null
           id?: string
           ip_address?: unknown | null
@@ -129,6 +143,7 @@ export type Database = {
           respondent_email?: string | null
           respondent_name?: string | null
           response_data?: Json
+          status?: string
           submitted_at?: string | null
           user_agent?: string | null
         }
@@ -144,34 +159,40 @@ export type Database = {
       }
       form_templates: {
         Row: {
-          category: string | null
+          category: string
           created_at: string | null
           created_by: string | null
           description: string | null
           id: string
-          is_public: boolean | null
+          is_active: boolean | null
           name: string
-          questions: Json
+          template_data: Json
+          updated_at: string | null
+          usage_count: number | null
         }
         Insert: {
-          category?: string | null
+          category: string
           created_at?: string | null
           created_by?: string | null
           description?: string | null
           id?: string
-          is_public?: boolean | null
+          is_active?: boolean | null
           name: string
-          questions?: Json
+          template_data?: Json
+          updated_at?: string | null
+          usage_count?: number | null
         }
         Update: {
-          category?: string | null
+          category?: string
           created_at?: string | null
           created_by?: string | null
           description?: string | null
           id?: string
-          is_public?: boolean | null
+          is_active?: boolean | null
           name?: string
-          questions?: Json
+          template_data?: Json
+          updated_at?: string | null
+          usage_count?: number | null
         }
         Relationships: []
       }
@@ -186,11 +207,13 @@ export type Database = {
           is_active: boolean | null
           questions: Json
           settings: Json | null
+          submission_count: number | null
           template_type: string | null
           title: string
           token: string
           updated_at: string | null
           user_id: string | null
+          view_count: number | null
         }
         Insert: {
           branding?: Json | null
@@ -202,11 +225,13 @@ export type Database = {
           is_active?: boolean | null
           questions?: Json
           settings?: Json | null
+          submission_count?: number | null
           template_type?: string | null
           title: string
           token?: string
           updated_at?: string | null
           user_id?: string | null
+          view_count?: number | null
         }
         Update: {
           branding?: Json | null
@@ -218,11 +243,13 @@ export type Database = {
           is_active?: boolean | null
           questions?: Json
           settings?: Json | null
+          submission_count?: number | null
           template_type?: string | null
           title?: string
           token?: string
           updated_at?: string | null
           user_id?: string | null
+          view_count?: number | null
         }
         Relationships: []
       }
