@@ -33,8 +33,14 @@ yarn-error.log*
 coverage
 *.lcov
 
-# Functions (handled separately)
-functions/
+# Functions build outputs and node_modules (but keep package.json for workspace detection)
+functions/*/node_modules
+functions/*/dist
+functions/*/.env*
+functions/python/*/.venv
+functions/python/*/venv
+
+# Infrastructure
 infra/
 
 # Documentation
