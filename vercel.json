@@ -2,8 +2,9 @@
   "version": 2,
   "framework": "nextjs",
   "installCommand": "npm install",
-  "buildCommand": "npm run build --workspace=web",
+  "buildCommand": "cd apps/web && npm run build",
   "outputDirectory": "apps/web/.next",
+  "rootDirectory": "apps/web",
   "env": {
     "NODE_VERSION": "18.x"
   },
